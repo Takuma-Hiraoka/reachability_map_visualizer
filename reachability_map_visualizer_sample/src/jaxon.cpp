@@ -38,26 +38,29 @@ namespace reachability_map_visualizer_sample{
       constraint->joint() = param->robot->joint(i);
       param->constraints.push_back(constraint);
     }
-    param->variables.push_back(param->robot->joint("RARM_JOINT0"));
-    param->variables.push_back(param->robot->joint("RARM_JOINT1"));
-    param->variables.push_back(param->robot->joint("RARM_JOINT2"));
-    param->variables.push_back(param->robot->joint("RARM_JOINT3"));
-    param->variables.push_back(param->robot->joint("RARM_JOINT4"));
-    param->variables.push_back(param->robot->joint("RARM_JOINT5"));
-    param->variables.push_back(param->robot->joint("RARM_JOINT6"));
-    param->variables.push_back(param->robot->joint("RARM_JOINT7"));
+    param->variables.push_back(param->robot->joint("LARM_JOINT0"));
+    param->variables.push_back(param->robot->joint("LARM_JOINT1"));
+    param->variables.push_back(param->robot->joint("LARM_JOINT2"));
+    param->variables.push_back(param->robot->joint("LARM_JOINT3"));
+    param->variables.push_back(param->robot->joint("LARM_JOINT4"));
+    param->variables.push_back(param->robot->joint("LARM_JOINT5"));
+    param->variables.push_back(param->robot->joint("LARM_JOINT6"));
+    param->variables.push_back(param->robot->joint("LARM_JOINT7"));
     reachability_map_visualizer::EndEffector ee;
-    ee.parent = param->robot->link("RARM_JOINT7");
+    ee.parent = param->robot->link("LARM_JOINT7");
     ee.localPose = cnoid::Isometry3::Identity();
     param->endEffectors.push_back(ee);
-    param->posResolution = 0.05;
-    param->origin = cnoid::Vector3(0.4, -0.5,0.5);
-    param->size = cnoid::Vector3(3.0,0.05,2.0);
+    param->posResolution = 0.02;
+    param->pikParam.maxIteration = 30;
+    param->testPerGrid = 100;
+    param->origin = cnoid::Vector3(0.4, 0.5,0.5);
+    param->size = cnoid::Vector3(3.0,3.0,3.0);
+    std::shared_ptr<reachability_map_visualizer::ReachabilityMap> map = std::make_shared<reachability_map_visualizer::ReachabilityMap>();
+    reachability_map_visualizer::createMap(param, map);
 
-    param->viewer = viewer;
-
+    reachability_map_visualizer::writeMap(ros::package::getPath("reachability_map_visualizer_sample") + "/config/jaxon.yaml",map);
     viewer->objects(param->robot);
-    reachability_map_visualizer::visualize(param);
+    reachability_map_visualizer::visualizeMap(map, viewer);
     viewer->drawObjects();
   }
 }

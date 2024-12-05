@@ -22,16 +22,24 @@ namespace reachability_map_visualizer {
     cnoid::Vector3 size = cnoid::Vector3(2.0,2.0,2.0);
     cnoid::Vector3 origin = cnoid::Vector3::Zero();
     prioritized_inverse_kinematics_solver2::IKParam pikParam;
-    double transparency = 0.5;
-    std::shared_ptr<choreonoid_viewer::Viewer> viewer = nullptr;
     ReachabilityMapParam(){
       pikParam.maxIteration = 30;
     };
   };
+  class ReachabilityMap {
+  public:
+    double posResolution = 0.1;
+    cnoid::Vector3 origin = cnoid::Vector3::Zero();
+    double transparency = 0.6;
+    std::vector<std::pair<cnoid::Vector3, double>> reachabilityMap;
+  };
   // origin中心としたsizeの立方体をposResolutionで区切ったグリッドそれぞれの位置について
   // ランダム姿勢を生成し、EndEffectorがそのPoseに到達するかどうかを調べる．これを全EndEffectorで調べる.
   // ランダム姿勢をtestPerGrid回生成して解けた割合を記録し、その割合に応じてvisualizeする.
-  void visualize(const std::shared_ptr<ReachabilityMapParam>& param);
+  void createMap(const std::shared_ptr<ReachabilityMapParam>& param, const std::shared_ptr<ReachabilityMap>& map);
+  void visualizeMap(const std::shared_ptr<ReachabilityMap>& map, const std::shared_ptr<choreonoid_viewer::Viewer>& viewer);
+  void writeMap(std::string outputFilePath, const std::shared_ptr<ReachabilityMap>& map);
+  void readMap(std::string inputFilePath, const std::shared_ptr<ReachabilityMap>& map);
 }
 
 #endif
