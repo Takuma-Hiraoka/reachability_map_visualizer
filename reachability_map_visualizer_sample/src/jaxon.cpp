@@ -50,9 +50,9 @@ namespace reachability_map_visualizer_sample{
     ee.parent = param->robot->link("LARM_JOINT7");
     ee.localPose = cnoid::Isometry3::Identity();
     param->endEffectors.push_back(ee);
-    param->posResolution = 0.02;
+    param->posResolution = 0.04;
     param->pikParam.maxIteration = 30;
-    param->testPerGrid = 100;
+    param->testPerGrid = 30;
     param->origin = cnoid::Vector3(0.4, 0.5,0.5);
     param->size = cnoid::Vector3(3.0,3.0,3.0);
     std::shared_ptr<reachability_map_visualizer::ReachabilityMap> map = std::make_shared<reachability_map_visualizer::ReachabilityMap>();
