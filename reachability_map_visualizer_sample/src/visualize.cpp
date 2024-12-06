@@ -33,6 +33,7 @@ namespace reachability_map_visualizer_sample{
     std::shared_ptr<reachability_map_visualizer::ReachabilityMap> map = std::make_shared<reachability_map_visualizer::ReachabilityMap>();
 
     reachability_map_visualizer::readMap(ros::package::getPath("reachability_map_visualizer_sample") + "/config/jaxon.yaml",map);
+    map->boxSize = cnoid::Vector3(map->posResolution, map->posResolution, 0.01);
     viewer->objects(robot);
     reachability_map_visualizer::visualizeMap(map, viewer);
     viewer->drawObjects();

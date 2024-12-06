@@ -30,7 +30,8 @@ namespace reachability_map_visualizer {
   public:
     double posResolution = 0.1;
     cnoid::Vector3 origin = cnoid::Vector3::Zero();
-    double transparency = 0.6;
+    double transparency = 0.9;
+    cnoid::Vector3 boxSize = cnoid::Vector3::Zero(); // defaultは立方体で埋め尽くす. Zを薄くすると横から見やすい.
     std::vector<std::pair<cnoid::Vector3, double>> reachabilityMap;
   };
   // origin中心としたsizeの立方体をposResolutionで区切ったグリッドそれぞれの位置について

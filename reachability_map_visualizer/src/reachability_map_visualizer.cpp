@@ -96,7 +96,8 @@ namespace reachability_map_visualizer {
       float blue = std::max(2*solvability - 1.0, 0.0);
 
       cnoid::SgShapePtr shape = new cnoid::SgShape();
-      shape->setMesh(meshGenerator.generateBox(cnoid::Vector3(map->posResolution,map->posResolution,0.01)));
+      if (map->boxSize == cnoid::Vector3::Zero()) shape->setMesh(meshGenerator.generateBox(cnoid::Vector3(map->posResolution,map->posResolution,map->posResolution)));
+      else shape->setMesh(meshGenerator.generateBox(map->boxSize));
       cnoid::SgMaterialPtr material = new cnoid::SgMaterial();
       material->setTransparency(map->transparency);
       material->setDiffuseColor(cnoid::Vector3f(red, green, blue));
