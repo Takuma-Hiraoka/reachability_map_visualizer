@@ -62,7 +62,8 @@ namespace reachability_map_visualizer {
               constraint->B_link() = nullptr;
               constraint->B_localpos() = targetPose;
               constraint->eval_link() = nullptr;
-              constraint->weight() << 1.0, 1.0, 1.0, 1.0, 1.0, 1.0;
+              constraint->eval_localR() = targetPose.linear();
+              constraint->weight() = param->weight;
               std::vector<std::vector<std::shared_ptr<ik_constraint2::IKConstraint> > > constraints{param->constraints, std::vector<std::shared_ptr<ik_constraint2::IKConstraint>>{constraint} };
               std::vector<std::shared_ptr<prioritized_qp_base::Task> > prevTasks;
               solved = prioritized_inverse_kinematics_solver2::solveIKLoop(param->variables,

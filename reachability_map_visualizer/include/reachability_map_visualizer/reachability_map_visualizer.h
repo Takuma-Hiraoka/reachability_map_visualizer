@@ -8,8 +8,8 @@
 namespace reachability_map_visualizer {
   class EndEffector {
   public:
-    cnoid::LinkPtr parent;
-    cnoid::Isometry3 localPose;
+    cnoid::LinkPtr parent = nullptr;
+    cnoid::Isometry3 localPose = cnoid::Isometry3::Identity();
   };
   class ReachabilityMapParam {
   public:
@@ -21,9 +21,11 @@ namespace reachability_map_visualizer {
     int testPerGrid = 100;
     cnoid::Vector3 size = cnoid::Vector3(2.0,2.0,2.0);
     cnoid::Vector3 origin = cnoid::Vector3::Zero();
+    cnoid::Vector6 weight; // ランダムに選んだ姿勢座標系
     prioritized_inverse_kinematics_solver2::IKParam pikParam;
     ReachabilityMapParam(){
       pikParam.maxIteration = 30;
+      weight << 1.0, 1.0, 1.0, 1.0, 1.0, 1.0;
     };
   };
   class ReachabilityMap {
