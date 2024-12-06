@@ -25,7 +25,7 @@ namespace reachability_map_visualizer {
     prioritized_inverse_kinematics_solver2::IKParam pikParam;
     ReachabilityMapParam(){
       pikParam.maxIteration = 30;
-      weight << 1.0, 1.0, 1.0, 1.0, 1.0, 1.0;
+      weight << 1.0, 1.0, 1.0, 1.0, 1.0, 1.0; // IKはgridの中心位置に対して解くので、posResolutionを大きくすればするほど、たまたま中心では解けないがその近辺では解ける、ということが起こる. 位置に関する重みをprecision / posResolution倍しておくとよい.
     };
   };
   class ReachabilityMap {
