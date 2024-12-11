@@ -4,14 +4,23 @@
 #include <choreonoid_viewer/choreonoid_viewer.h>
 
 namespace reachability_map_visualizer_sample{
-  void jaxon();
-  class jaxonItem : public choreonoid_viewer::ViewerBaseItem {
+  void jaxon_hand();
+  class jaxon_handItem : public choreonoid_viewer::ViewerBaseItem {
   public:
-    static void initializeClass(cnoid::ExtensionManager* ext){ ext->itemManager().registerClass<jaxonItem>("jaxonItem"); }
+    static void initializeClass(cnoid::ExtensionManager* ext){ ext->itemManager().registerClass<jaxon_handItem>("jaxon_handItem"); }
   protected:
-    virtual void main() override{ jaxon(); return;}
+    virtual void main() override{ jaxon_hand(); return;}
   };
-  typedef cnoid::ref_ptr<jaxonItem> jaxonItemPtr;
+  typedef cnoid::ref_ptr<jaxon_handItem> jaxon_handItemPtr;
+
+  void jaxon_foot();
+  class jaxon_footItem : public choreonoid_viewer::ViewerBaseItem {
+  public:
+    static void initializeClass(cnoid::ExtensionManager* ext){ ext->itemManager().registerClass<jaxon_footItem>("jaxon_footItem"); }
+  protected:
+    virtual void main() override{ jaxon_foot(); return;}
+  };
+  typedef cnoid::ref_ptr<jaxon_footItem> jaxon_footItemPtr;
 
   void visualize();
   class visualizeItem : public choreonoid_viewer::ViewerBaseItem {
@@ -31,7 +40,8 @@ namespace reachability_map_visualizer_sample{
     }
     virtual bool initialize() override
     {
-      jaxonItem::initializeClass(this);
+      jaxon_handItem::initializeClass(this);
+      jaxon_footItem::initializeClass(this);
       visualizeItem::initializeClass(this);
       return true;
     }

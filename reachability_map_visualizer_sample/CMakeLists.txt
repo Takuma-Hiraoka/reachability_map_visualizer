@@ -25,7 +25,8 @@ include_directories(
 
 add_library(CnoidReachabilityMapVisualizerSamplePlugin SHARED
   src/CnoidReachabilityMapVisualizerSamplePlugin.cpp
-  src/jaxon.cpp
+  src/jaxon_hand.cpp
+  src/jaxon_foot.cpp
   src/visualize.cpp
   )
 target_link_libraries(CnoidReachabilityMapVisualizerSamplePlugin

@@ -8,7 +8,7 @@ items:
       id: 1
       name: "ReachabilityMapVisualizerSamplePlugin"
       plugin: ReachabilityMapVisualizerSamplePlugin
-      class: jaxonItem
+      class: jaxon_handItem
 views:
   -
     id: 0
