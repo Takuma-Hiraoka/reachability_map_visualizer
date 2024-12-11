@@ -1,0 +1,25 @@
+- git:
+    local-name: choreonoid
+    uri: https://github.com/choreonoid/choreonoid.git
+    version: release-2.1
+- git:
+    local-name: qp_solvers
+    uri: https://github.com/Naoki-Hiraoka/qp_solvers.git
+- git:
+    uri: https://github.com/Naoki-Hiraoka/abseil_catkin.git
+    local-name: abseil_catkin
+- git:
+    local-name: prioritized_qp
+    uri: https://github.com/Naoki-Hiraoka/prioritized_qp.git
+- git:
+    uri: https://github.com/Naoki-Hiraoka/ik_solvers2
+    local-name: ik_solvers
+- git:
+    local-name: choreonoid_viewer
+    uri: https://github.com/Naoki-Hiraoka/choreonoid_viewer2.git
+- git:
+    local-name: rtmros_choreonoid
+    uri: https://github.com/start-jsk/rtmros_choreonoid.git
+- git:
+    local-name: reachability_map_visualizer
+    uri: https://github.com/Takuma-Hiraoka/reachability_map_visualizer.git
