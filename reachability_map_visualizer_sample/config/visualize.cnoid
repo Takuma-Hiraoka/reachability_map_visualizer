@@ -17,6 +17,13 @@ views:
     state:
       floorGrid: false
       background_color: [ 0.0, 0.0, 0.0 ]
+      cameras:
+        -
+          camera: [ System, Perspective ]
+          isCurrent: true
+          eye: [ 0.0, 4.0, 0.0 ]
+          direction: [ 0.0, -1.0, 0.0 ]
+          up: [ 0.0, 0.0, 1.0 ]
 viewAreas:
   -
     type: embedded
