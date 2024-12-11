@@ -19,6 +19,7 @@ namespace reachability_map_visualizer {
     std::vector<EndEffector> endEffectors;
     double posResolution = 0.1;
     int testPerGrid = 100;
+    int initialSolutionNum = 100;
     cnoid::Vector3 size = cnoid::Vector3(2.0,2.0,2.0);
     cnoid::Vector3 origin = cnoid::Vector3::Zero();
     cnoid::Vector6 weight; // ランダムに選んだ姿勢座標系

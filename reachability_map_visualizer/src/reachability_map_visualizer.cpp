@@ -2,6 +2,7 @@
 #include <cnoid/MeshGenerator>
 #include <cnoid/YAMLWriter>
 #include <cnoid/YAMLReader>
+#include <random>
 
 namespace reachability_map_visualizer {
   void frame2Link(const std::vector<double>& frame, const std::vector<cnoid::LinkPtr>& links){
@@ -28,6 +29,26 @@ namespace reachability_map_visualizer {
       if(links[l]->isRevoluteJoint() || links[l]->isPrismaticJoint()) {
         frame.push_back(links[l]->q());
       }else if(links[l]->isFreeJoint()) {
+        frame.push_back(links[l]->p()[0]);
+        frame.push_back(links[l]->p()[1]);
+        frame.push_back(links[l]->p()[2]);
+        cnoid::Quaternion q(links[l]->R());
+        frame.push_back(q.x());
+        frame.push_back(q.y());
+        frame.push_back(q.z());
+        frame.push_back(q.w());
+      }
+    }
+  }
+  void randomFrame(const std::vector<cnoid::LinkPtr>& links, std::vector<double>& frame){
+    frame.clear();
+    std::random_device seed_gen;
+    std::default_random_engine engine(seed_gen());
+    for(int l=0;l<links.size();l++){
+      if(links[l]->isRevoluteJoint() || links[l]->isPrismaticJoint()) {
+        std::uniform_real_distribution<> dist(links[l]->q_lower(),links[l]->q_upper());
+        frame.push_back(dist(engine));
+      }else if(links[l]->isFreeJoint()) { // 適当
         frame.push_back(links[l]->p()[0]);
         frame.push_back(links[l]->p()[1]);
         frame.push_back(links[l]->p()[2]);
@@ -69,11 +90,24 @@ namespace reachability_map_visualizer {
               }
               std::vector<std::vector<std::shared_ptr<ik_constraint2::IKConstraint> > > constraints{param->constraints, std::vector<std::shared_ptr<ik_constraint2::IKConstraint>>{constraint} };
               std::vector<std::shared_ptr<prioritized_qp_base::Task> > prevTasks;
+              frame2Link(initPose,param->variables);
               solved = prioritized_inverse_kinematics_solver2::solveIKLoop(param->variables,
                                                                            constraints,
                                                                            prevTasks,
                                                                            param->pikParam
                                                                            );
+              for (int sol=0;sol<param->initialSolutionNum && !solved;sol++) {
+                std::vector<double> initialSolution;
+                randomFrame(param->variables,initialSolution);
+                frame2Link(initialSolution,param->variables);
+                param->robot->calcForwardKinematics();
+                param->robot->calcCenterOfMass();
+                solved = prioritized_inverse_kinematics_solver2::solveIKLoop(param->variables,
+                                                                             constraints,
+                                                                             prevTasks,
+                                                                             param->pikParam
+                                                                             );
+              }
               frame2Link(initPose,param->variables);
               param->robot->calcForwardKinematics();
               param->robot->calcCenterOfMass();
