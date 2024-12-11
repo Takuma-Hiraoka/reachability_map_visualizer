@@ -48,13 +48,14 @@ namespace reachability_map_visualizer_sample{
     param->variables.push_back(param->robot->joint("LARM_JOINT7"));
     reachability_map_visualizer::EndEffector ee;
     ee.parent = param->robot->link("LARM_JOINT7");
-    ee.localPose = cnoid::Isometry3::Identity();
+    ee.localPose.translation() = cnoid::Vector3(-0.03,0.0,-0.15);
+    ee.localPose.linear() = cnoid::rotFromRpy(0.0,M_PI/2,0.0);
     param->endEffectors.push_back(ee);
     param->posResolution = 0.04;
     param->pikParam.maxIteration = 30;
     param->testPerGrid = 30;
-    param->origin = cnoid::Vector3(0.4, 0.5,0.5);
-    param->size = cnoid::Vector3(3.0,3.0,3.0);
+    param->origin = cnoid::Vector3(0.0, 0.1,0.5); // IKが解けない時に無駄な計算をしてしまうので、ぎりぎりのサイズにしたほうが速い
+    param->size = cnoid::Vector3(2.0,2.0,2.0);
     std::shared_ptr<reachability_map_visualizer::ReachabilityMap> map = std::make_shared<reachability_map_visualizer::ReachabilityMap>();
     reachability_map_visualizer::createMap(param, map);
 
