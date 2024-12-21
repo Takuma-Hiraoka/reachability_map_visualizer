@@ -48,11 +48,12 @@ namespace reachability_map_visualizer {
       if(links[l]->isRevoluteJoint() || links[l]->isPrismaticJoint()) {
         std::uniform_real_distribution<> dist(links[l]->q_lower(),links[l]->q_upper());
         frame.push_back(dist(engine));
-      }else if(links[l]->isFreeJoint()) { // 適当
-        frame.push_back(links[l]->p()[0]);
-        frame.push_back(links[l]->p()[1]);
-        frame.push_back(links[l]->p()[2]);
-        cnoid::Quaternion q(links[l]->R());
+      }else if(links[l]->isFreeJoint()) { // 適当に0.2mの範囲にしておく
+        std::uniform_real_distribution<> dist(-0.2, 0.2);
+        frame.push_back(dist(engine));
+        frame.push_back(dist(engine));
+        frame.push_back(dist(engine));
+        cnoid::Quaternion q = Eigen::Quaterniond::UnitRandom();
         frame.push_back(q.x());
         frame.push_back(q.y());
         frame.push_back(q.z());
@@ -85,10 +86,12 @@ namespace reachability_map_visualizer {
               constraint->eval_link() = nullptr;
               constraint->eval_localR() = targetPose.linear();
               constraint->precision() = param->posResolution;
-              for (int i=0;i<3;i++) {
-                constraint->weight()[i+3] = param->weight[i+3] * param->posResolution / 1e-3;
+              for (int w=0;w<3;w++) {
+                constraint->weight()[w+3] = param->weight[w+3] * param->posResolution / 1e-3;
               }
-              std::vector<std::vector<std::shared_ptr<ik_constraint2::IKConstraint> > > constraints{param->constraints, std::vector<std::shared_ptr<ik_constraint2::IKConstraint>>{constraint} };
+              std::vector<std::vector<std::shared_ptr<ik_constraint2::IKConstraint> > > constraints;
+              for (int c=0; c<param->constraints.size();c++) constraints.push_back(param->constraints[c]);
+              constraints.push_back(std::vector<std::shared_ptr<ik_constraint2::IKConstraint>>{constraint});
               std::vector<std::shared_ptr<prioritized_qp_base::Task> > prevTasks;
               frame2Link(initPose,param->variables);
               solved = prioritized_inverse_kinematics_solver2::solveIKLoop(param->variables,

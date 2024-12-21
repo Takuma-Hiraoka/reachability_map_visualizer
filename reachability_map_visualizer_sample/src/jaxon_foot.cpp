@@ -33,11 +33,13 @@ namespace reachability_map_visualizer_sample{
     param->robot->calcForwardKinematics();
     param->robot->calcCenterOfMass();
     // joint limit
+    std::vector<std::shared_ptr<ik_constraint2::IKConstraint> > constraints;
     for(int i=0;i<param->robot->numJoints();i++){
       std::shared_ptr<ik_constraint2::JointLimitConstraint> constraint = std::make_shared<ik_constraint2::JointLimitConstraint>();
       constraint->joint() = param->robot->joint(i);
-      param->constraints.push_back(constraint);
+      constraints.push_back(constraint);
     }
+    param->constraints.push_back(constraints);
     param->variables.push_back(param->robot->joint("LLEG_JOINT0"));
     param->variables.push_back(param->robot->joint("LLEG_JOINT1"));
     param->variables.push_back(param->robot->joint("LLEG_JOINT2"));

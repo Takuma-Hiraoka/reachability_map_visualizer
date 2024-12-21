@@ -14,7 +14,7 @@ namespace reachability_map_visualizer {
   class ReachabilityMapParam {
   public:
     cnoid::BodyPtr robot;
-    std::vector<std::shared_ptr<ik_constraint2::IKConstraint> > constraints;
+    std::vector<std::vector<std::shared_ptr<ik_constraint2::IKConstraint> > > constraints;
     std::vector<cnoid::LinkPtr> variables;
     std::vector<EndEffector> endEffectors;
     double posResolution = 0.1;
