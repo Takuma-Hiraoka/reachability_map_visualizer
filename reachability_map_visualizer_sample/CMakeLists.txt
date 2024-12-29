@@ -28,6 +28,7 @@ add_library(CnoidReachabilityMapVisualizerSamplePlugin SHARED
   src/jaxon_hand.cpp
   src/jaxon_foot.cpp
   src/visualize.cpp
+  src/solvability_bar.cpp
   )
 target_link_libraries(CnoidReachabilityMapVisualizerSamplePlugin
   ${catkin_LIBRARIES}
