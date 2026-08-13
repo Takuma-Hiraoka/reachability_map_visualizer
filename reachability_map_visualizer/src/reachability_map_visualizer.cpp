@@ -66,8 +66,8 @@ namespace reachability_map_visualizer {
   }
 
   void createMapSub(const std::shared_ptr<ReachabilityMapParam>& param, const std::shared_ptr<ReachabilityMap>& map,
+                    const cnoid::BodyPtr& tmp_robot,
                     const std::vector<cnoid::Vector3>& xyz_table, const std::vector<double>& init_pose, std::mutex& mutex, int thread_num) {
-    cnoid::BodyPtr tmp_robot = param->robot->clone();
     std::vector<cnoid::LinkPtr> tmp_variables;
     for (int v_num = 0; v_num < param->variables.size(); v_num++) {
       tmp_variables.push_back(tmp_robot->joint(param->variables[v_num]->jointId()));
@@ -180,9 +180,23 @@ namespace reachability_map_visualizer {
       }
     }
 
+    // Body::clone() and the destruction of clones touch shared Choreonoid
+    // scene-graph reference counts. Creating / destroying those clones in
+    // worker threads can corrupt the reference counts when thread_num > 1.
+    // Keep ownership in this thread and only let workers mutate their own
+    // pre-created Body instance.
+    std::vector<cnoid::BodyPtr> tmp_robots;
+    tmp_robots.reserve(thread_num);
+    for(int i = 0; i < thread_num; ++i){
+      tmp_robots.push_back(param->robot->clone());
+    }
+
     std::vector<std::thread> threads;
     for(size_t i=0; i<thread_num; ++i){
-        threads.emplace_back(std::thread(createMapSub, std::ref(param), std::ref(map), std::ref(xyz_table_block[i]), std::ref(initPose), std::ref(mutex), i));
+        threads.emplace_back(std::thread(createMapSub, std::ref(param), std::ref(map),
+                                         std::cref(tmp_robots[i]),
+                                         std::cref(xyz_table_block[i]),
+                                         std::cref(initPose), std::ref(mutex), i));
     }
     for(auto& thread : threads){
         thread.join();
